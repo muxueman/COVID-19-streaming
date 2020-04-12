@@ -1,0 +1,86 @@
+/* Overall setup */
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 16px;
+    color: black;
+    background-color: white;
+    font-family: 'Gotu', sans-serif;   /* Or using 'Baloo Paaji 2', cursive;*/
+}
+
+
+/* Main-part-Map */
+.maps {
+    height: 600px;
+}
+
+/* Main-part-graphs */
+#timeline-graphs {
+    padding-top: 50px;
+}
+
+#timeline-graphs section.container {
+    background-color: grey;
+    /* height = 220px*/
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+}
+
+#timeline-graphs h2 {
+    text-align: center;
+    font-family: 'Gotu', sans-serif;
+    font-size: 1.25em;
+}
+
+#timeline-graphs .item {
+    background-color: grey;
+    position: absolute;
+    width: 120px;
+    top: 0;
+    right: 0;
+}
+
+#timeline-graphs p{
+    font-family: 'Baloo Paaji 2', cursive;
+    margin-top: 30px;
+    text-align: justify;
+    font-size:100%;
+}
+
+/* Footer */
+.panel-footer {
+    margin-top: 30px;
+    padding-top: 35px;
+    padding-bottom: 30px;
+    background-color: #222;
+    border-top: 0;
+    color:  white;
+}
+.panel-footer div.row {
+    margin-bottom: 35px;
+}
+
+#res, #sym {
+    line-height: 2;
+    font-size: .8em;
+}
+#res > span, #sym > span {
+    font-size: 1.5em;
+}
+#sym p {
+    color: #557c3e;
+    font-size: .8em;
+    line-height: 1.8;
+}
+#testimonials {
+    font-style: italic;
+}
+#testimonials p:nth-child(2) {
+    margin-top: 15px;
+}
+
+  
