@@ -13,11 +13,16 @@ body {
 
 
 /* Main-part-Map */
+#main-content {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
 .maps {
     height: 600px;
 }
 
 /* Main-part-graphs */
+
 #timeline-graphs {
     padding-top: 50px;
 }
