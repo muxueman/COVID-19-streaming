@@ -1,10 +1,20 @@
 /* Map*/
 
+var map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('New-York-State-map'), {
+            center: {lat: 40.7128, lng: -74.0060},
+            zoom: 8
+        });
+    }
+
+    $('.carousel').carousel()
+
 (function (global) {
 
     var dc = {};
     
-    var homeHtml = "snippets/home-snippet.html";
+    var homeHtml = "snippets/home-snippets.html";
     
     // Convenience function for inserting innerHTML for 'select'
     var insertHtml = function (selector, html) {
@@ -34,14 +44,19 @@
     });
     
     var map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('New-York-State-map'), {
-            center: {lat: 40.7128, lng: -74.0060},
-            zoom: 8
-        });
-    }
+    map = new google.maps.Map(document.getElementById('New-York-State-map'), {
+              center: {lat: 40.7128, lng: -74.0060},
+              zoom: 8
+          });
+    // function initMap() {
+    //     map = new google.maps.Map(document.getElementById('New-York-State-map'), {
+    //         center: {lat: 40.7128, lng: -74.0060},
+    //         zoom: 8
+    //     });
+    // }
 
     $('.carousel').carousel()
+    
     
     global.$dc = dc;
     
