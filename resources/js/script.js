@@ -23,12 +23,28 @@
     };
 
     // Init google map 
-    var initMap = function (selector) {
-        var mapElem = new google.maps.Map(document.getElementById(selector), {
+    var initNewYorkMap = function () {
+        var mapElem = new google.maps.Map(document.getElementById("New-York-ZipCode-map"), {
                 center: {lat: 40.7128, lng: -74.0060},
                 zoom: 11
         });
-        mapElem.data.loadGeoJson("data/ny_new_york_zip_codes_geo.min.json");
+        mapElem.data.loadGeoJson("data/new-york-zipcode.geojson");
+    };
+
+    var initNewYorkSimpleMap = function () {
+        var mapElem = new google.maps.Map(document.getElementById("New-York-City-map"), {
+                center: {lat: 42.8994, lng: -74.2179},
+                zoom: 7
+        });
+        mapElem.data.loadGeoJson("data/new-york-city.geojson");
+    };
+
+    var initCountryMap = function () {
+        var mapElem = new google.maps.Map(document.getElementById("US-State-map"), {
+                center: {lat: 37.0902, lng: -95.7129},
+                zoom: 4
+        });
+        mapElem.data.loadGeoJson("data/us-states.geojson");
     };
     
     // On page load (before images or CSS)
@@ -41,7 +57,9 @@
         function (responseText) {
             document.querySelector("#main-content")
                 .innerHTML = responseText;
-            initMap("New-York-State-map");      
+            initNewYorkMap(); 
+            initNewYorkSimpleMap();
+            initCountryMap();
       },
       false);
     });
