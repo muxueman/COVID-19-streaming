@@ -28,6 +28,7 @@
                 center: {lat: 40.7128, lng: -74.0060},
                 zoom: 11
         });
+        mapElem.data.loadGeoJson("data/ny_new_york_zip_codes_geo.min.json");
     };
     
     // On page load (before images or CSS)
