@@ -1,4 +1,7 @@
-// using ajax-utils.js for HTTP requestor (asynchronous), e.g. loading data
+/* using ajax-utils.js for HTTP requestor (asynchronous), e.g. loading data
+无效解决方案： chrome添加启动参数：--allow-file-access-from-files ，这样本地ajax请求就不会报跨域错误了
+解决： 使用local http server: browser-sync start --server --directory ---files "*"
+*/
 
 (function (global) {
 
