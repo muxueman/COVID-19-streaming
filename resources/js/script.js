@@ -1,14 +1,32 @@
 
 
 
-
 (function (global) {
 
     var dc = {};
     
     var homeHtml = "snippets/home-snippets.html";
     var graphHtml = "snippets/graph-snippets.html";
-    
+
+    document.querySelector('#locate-me').addEventListener('click', function (event) {
+        var location = document.querySelector('#show-location');
+        function success(position) {
+            var latitude  = position.coords.latitude;
+            var longitude = position.coords.longitude  
+            location.placeholder = `Lat: ${latitude}°, Lng: ${longitude}°`;;
+            reNewYorkMap(latitude, longitude);  
+            reNewYorkSimpleMap(latitude, longitude);
+        }
+        function error() {
+            location.placeholder = 'Unable to retrieve your location';
+        }
+        if (!navigator.geolocation) {
+          location.placeholder = 'Geolocation is not supported by your browser';
+        } else {
+          location.placeholder = 'Locating…';
+          navigator.geolocation.getCurrentPosition(success, error);
+        }
+    });
     // Convenience function for inserting innerHTML for 'select'
     var insertHtml = function (selector, html) {
         var targetElem = document.querySelector(selector);
@@ -21,6 +39,34 @@
         html += "<img src='images/ajax-loader.gif'></div>";
         insertHtml(selector, html);
     };
+
+    // add location info for google map
+    var addMarkerToMap = function (selector,latData, lngData) {
+        var marker = new google.maps.Marker({
+            position: {
+                lat: latData, 
+                lng: lngData,
+            },
+            map: selector
+        });
+    }
+    var reNewYorkMap = function (latData, lngData) {
+        var mapElem = new google.maps.Map(document.getElementById("New-York-ZipCode-map"), {
+            center: {lat: latData, lng: lngData},
+            zoom: 13
+        });
+        mapElem.data.loadGeoJson("data/new-york-zipcode.geojson");
+        addMarkerToMap(mapElem, latData, lngData);
+    }
+    var reNewYorkSimpleMap = function(latData, lngData) {
+        var mapElem = new google.maps.Map(document.getElementById("New-York-City-map"), {
+            center: {lat: latData, lng: lngData},
+            zoom: 8
+        });
+        mapElem.data.loadGeoJson("data/new-york-city.geojson");
+        addMarkerToMap(mapElem, latData, lngData);
+    };
+
 
     // Init google map 
     var initNewYorkMap = function () {
