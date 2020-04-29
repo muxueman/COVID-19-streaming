@@ -14,8 +14,9 @@
             var latitude  = position.coords.latitude;
             var longitude = position.coords.longitude  
             location.placeholder = `Lat: ${latitude}°, Lng: ${longitude}°`;;
-            reNewYorkMap(latitude, longitude);  
-            reNewYorkSimpleMap(latitude, longitude);
+            initNewYorkMap(latitude, longitude, 13, true);  
+            initNewYorkSimpleMap(latitude, longitude, 8, true);
+            initCountryMap(latitude, longitude, 5, true);
         }
         function error() {
             location.placeholder = 'Unable to retrieve your location';
@@ -41,7 +42,7 @@
     };
 
     // add location info for google map
-    var addMarkerToMap = function (selector,latData, lngData) {
+    var addMarkerToMap = function (selector, latData, lngData) {
         var marker = new google.maps.Marker({
             position: {
                 lat: latData, 
@@ -50,47 +51,112 @@
             map: selector
         });
     }
-    var reNewYorkMap = function (latData, lngData) {
-        var mapElem = new google.maps.Map(document.getElementById("New-York-ZipCode-map"), {
-            center: {lat: latData, lng: lngData},
-            zoom: 13
-        });
-        mapElem.data.loadGeoJson("data/new-york-zipcode.geojson");
-        addMarkerToMap(mapElem, latData, lngData);
-    }
-    var reNewYorkSimpleMap = function(latData, lngData) {
-        var mapElem = new google.maps.Map(document.getElementById("New-York-City-map"), {
-            center: {lat: latData, lng: lngData},
-            zoom: 8
-        });
-        mapElem.data.loadGeoJson("data/new-york-city.geojson");
-        addMarkerToMap(mapElem, latData, lngData);
-    };
-
 
     // Init google map 
-    var initNewYorkMap = function () {
+    var initNewYorkMap = function (latData, lngData, zoomLevel, addMarker) {
         var mapElem = new google.maps.Map(document.getElementById("New-York-ZipCode-map"), {
-                center: {lat: 40.7128, lng: -74.0060},
-                zoom: 11
+                center: {lat: latData, lng: lngData},
+                zoom: zoomLevel
         });
         mapElem.data.loadGeoJson("data/new-york-zipcode.geojson");
+        // Set the stroke width, and fill color for each polygon
+        mapElem.data.setStyle({
+            fillColor: 'grey',
+            strokeWeight: 2,
+            strokeColor: 'black',
+        });
+
+        if (addMarker) addMarkerToMap(mapElem, latData, lngData);
+        
+        // map.data.setStyle(function(feature) {
+        //     return /** @type {google.maps.Data.StyleOptions} */({
+        //       fillColor: feature.getProperty('color'),
+        //       strokeWeight: 1
+        //     });
+        // });
+
+        // Set mouseover event for each feature.
+        mapElem.data.addListener('mouseover', function(event) {
+            document.getElementById('zipCode-info-box').textContent =
+                event.feature.getProperty('ZCTA5CE10');
+            mapElem.data.revertStyle();
+            mapElem.data.overrideStyle(event.feature, {strokeWeight: 4});
+        });
+
+        
+        mapElem.data.addListener('mouseout', function(event) {
+            mapElem.data.revertStyle();
+        });
     };
 
-    var initNewYorkSimpleMap = function () {
+    var initNewYorkSimpleMap = function (latData, lngData, zoomLevel,addMarker) {
         var mapElem = new google.maps.Map(document.getElementById("New-York-City-map"), {
-                center: {lat: 42.8994, lng: -74.2179},
-                zoom: 7
+                center: {lat: latData, lng: lngData},
+                zoom: zoomLevel
         });
         mapElem.data.loadGeoJson("data/new-york-city.geojson");
+        mapElem.data.setStyle({
+            fillColor: 'grey',
+            strokeWeight: 2,
+            strokeColor: 'black',
+        });
+
+        if (addMarker) addMarkerToMap(mapElem, latData, lngData);
+        // map.data.setStyle(function(feature) {
+        //     return /** @type {google.maps.Data.StyleOptions} */({
+        //       fillColor: feature.getProperty('color'),
+        //       strokeWeight: 1
+        //     });
+        // });
+
+        // Set mouseover event for each feature.
+        mapElem.data.addListener('mouseover', function(event) {
+            document.getElementById('city-info-box').textContent =
+                event.feature.getProperty('NAME');
+            mapElem.data.revertStyle();
+            mapElem.data.overrideStyle(event.feature, {strokeWeight: 4});
+        });
+
+        
+        mapElem.data.addListener('mouseout', function(event) {
+            mapElem.data.revertStyle();
+        });
     };
 
-    var initCountryMap = function () {
+    var initCountryMap = function (latData, lngData, zoomLevel, addMarker) {
         var mapElem = new google.maps.Map(document.getElementById("US-State-map"), {
-                center: {lat: 37.0902, lng: -95.7129},
-                zoom: 4
+                center: {lat: latData, lng: lngData},
+                zoom: zoomLevel
         });
         mapElem.data.loadGeoJson("data/us-states.geojson");
+
+        mapElem.data.setStyle({
+            fillColor: 'grey',
+            strokeWeight: 2,
+            strokeColor: 'black',
+        });
+
+        if (addMarker) addMarkerToMap(mapElem, latData, lngData);
+        // map.data.setStyle(function(feature) {
+        //     return /** @type {google.maps.Data.StyleOptions} */({
+        //       fillColor: feature.getProperty('color'),
+        //       strokeWeight: 1
+        //     });
+        // });
+
+        // Set mouseover event for each feature.
+        mapElem.data.addListener('mouseover', function(event) {
+            document.getElementById('state-info-box').textContent =
+                event.feature.getProperty('name');
+            mapElem.data.revertStyle();
+            mapElem.data.overrideStyle(event.feature, {strokeWeight: 4});
+        });
+
+        
+        mapElem.data.addListener('mouseout', function(event) {
+            mapElem.data.revertStyle();
+        });
+
     };
     
     // On page load (before images or CSS)
@@ -103,9 +169,9 @@
         function (responseText) {
             document.querySelector("#main-content")
                 .innerHTML = responseText;
-            initNewYorkMap(); 
-            initNewYorkSimpleMap();
-            initCountryMap();
+            initNewYorkMap(40.7128, -74.0060, 11, false); 
+            initNewYorkSimpleMap(42.8994, -74.2179, 7, false);
+            initCountryMap(37.0902, -95.7129, 4, false);
       },
       false);
     });
