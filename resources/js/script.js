@@ -8,6 +8,29 @@
     var homeHtml = "snippets/home-snippets.html";
     var graphHtml = "snippets/graph-snippets.html";
 
+
+    var covidData;
+    d3.csv("data/example.csv").then(function(data) {
+        console.log(data); // [{"Hello": "world"}, …]
+        covidData = data;
+    });
+
+    // d3.csv("https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv").then(function(data) {
+    //     console.log(data); // CORS needed for external server rsc
+    // });
+
+    var getBackGroundColor = function (level) {
+        // if (level == "low") return "#FFCCFF";
+        // else if (level == "Medium") return "#CC66FF";
+        // else if (level == "High") return "#9933CC";
+        // else if (level == "Extrem high") return "#660099";
+        if (level == "low") return "#CCFFFF";
+        else if (level == "Medium") return "#3366FF";
+        else if (level == "High") return "#0033CC";
+        else if (level == "Extrem high") return "#000066";
+        else return "white";
+    }
+
     document.querySelector('#locate-me').addEventListener('click', function (event) {
         var location = document.querySelector('#show-location');
         function success(position) {
@@ -130,24 +153,44 @@
         });
         mapElem.data.loadGeoJson("data/us-states.geojson");
 
-        mapElem.data.setStyle({
-            fillColor: 'grey',
-            strokeWeight: 2,
-            strokeColor: 'black',
+        mapElem.data.setStyle(function(feature) {
+            return /** @type {google.maps.Data.StyleOptions} */({
+              fillColor: getBackGroundColor(covidData[feature.getId()-1].level),
+              fillOpacity: 0.6,
+              strokeWeight: 1
+            });
         });
 
-        if (addMarker) addMarkerToMap(mapElem, latData, lngData);
-        // map.data.setStyle(function(feature) {
-        //     return /** @type {google.maps.Data.StyleOptions} */({
-        //       fillColor: feature.getProperty('color'),
-        //       strokeWeight: 1
-        //     });
+
+        // mapElem.data.setStyle({
+        //     fillColor: getBackGroundColor(covidData[feature.getId()-1].level),
+        //     strokeWeight: 2,
+        //     strokeColor: 'black',
         // });
+
+        if (addMarker) addMarkerToMap(mapElem, latData, lngData);
+        
 
         // Set mouseover event for each feature.
         mapElem.data.addListener('mouseover', function(event) {
-            document.getElementById('state-info-box').textContent =
-                event.feature.getProperty('name');
+            
+            var curContent = "";
+            var curColor = "write";
+            var curId = event.feature.getId();
+            if (curId <= 56) {
+                var curData = covidData[curId-1];
+                var curContent = "risk: " + curData.risk + "<br>" +
+                    "People's attitude:<br>P: " + curData.positive +
+                    "<br>N: " + curData.negative + "<br>confirmed cases/death<br>" +
+                    curData.cases + "/" + curData.deaths;
+                curColor = getBackGroundColor(curData.level);
+                
+            }
+            var content = event.feature.getProperty('name') + "<br>" + curContent;
+            document.getElementById('state-info-box').innerHTML = content;
+            // console.log(content);
+            // console.log(curColor);
+            document.getElementById("state-info-box").style.borderColor = curColor;
             mapElem.data.revertStyle();
             mapElem.data.overrideStyle(event.feature, {strokeWeight: 4});
         });
@@ -177,7 +220,7 @@
     });
 
 
-
+    
     dc.loadGraphs = function () {
         showLoading("#main-content");
         $ajaxUtils.sendGetRequest(
@@ -448,18 +491,8 @@
   }
 
 
-
-
-
-    
-
-
-
-
-
-
     global.$dc = dc;
-    
+    global.$d3 = d3;
     global.$('.carousel').carousel();    // bootstrap func
     
 })(window);
