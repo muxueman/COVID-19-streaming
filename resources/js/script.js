@@ -37,8 +37,8 @@
             var latitude  = position.coords.latitude;
             var longitude = position.coords.longitude  
             location.placeholder = `Lat: ${latitude}°, Lng: ${longitude}°`;;
-            initNewYorkMap(latitude, longitude, 13, true);  
-            initNewYorkSimpleMap(latitude, longitude, 8, true);
+            //initNewYorkMap(latitude, longitude, 13, true);  
+            //initNewYorkSimpleMap(latitude, longitude, 8, true);
             initCountryMap(latitude, longitude, 5, true);
         }
         function error() {
@@ -212,8 +212,8 @@
         function (responseText) {
             document.querySelector("#main-content")
                 .innerHTML = responseText;
-            initNewYorkMap(40.7128, -74.0060, 11, false); 
-            initNewYorkSimpleMap(42.8994, -74.2179, 7, false);
+            //initNewYorkMap(40.7128, -74.0060, 11, false); 
+            //initNewYorkSimpleMap(42.8994, -74.2179, 7, false);
             initCountryMap(37.0902, -95.7129, 4, false);
       },
       false);
