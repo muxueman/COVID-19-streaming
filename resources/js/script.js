@@ -44,7 +44,7 @@
     var startColor = '#99CCFF';
     var endColor = '#000066';
     var colorArr1 = gradient(startColor, endColor, 100);
-    var colorArr2 = gradient("#003399", startColor, 300);
+    var colorArr2 = gradient("#FF0033", "#FFCC99", 300); //003399,start
 
     var getBackGroundColor = function (risk) {
         //console.log(risk*1000 | 0);
