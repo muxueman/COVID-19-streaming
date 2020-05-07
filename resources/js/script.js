@@ -2,7 +2,8 @@
 
     var dc = {};
     var homeHtml = "snippets/home-snippets.html";
-    var graphHtml = "snippets/graph-snippets.html";
+    //var graphHtml = "snippets/graph-snippets.html";
+    var graphHtml = "snippets/home-2.html";
 
     var covidData;
     d3.csv("data/example.csv").then(function(data) {
@@ -183,7 +184,7 @@
         mapElem.data.setStyle(function(feature) {
             return /** @type {google.maps.Data.StyleOptions} */({
               fillColor: getBackGroundColor(covidData[feature.getId()-1].risk),
-              fillOpacity: 0.9,
+              fillOpacity: 0.8,
               //getBackGroundOpacity(covidData[feature.getId()-1].risk),
               strokeWeight: 1
             });
@@ -233,7 +234,7 @@
         mapElem.data.setStyle(function(feature) {
             return /** @type {google.maps.Data.StyleOptions} */({
               fillColor: getAttitudeColor(covidData[feature.getId()-1].positive),
-              fillOpacity: 0.9,
+              fillOpacity: 0.75,
               //getBackGroundOpacity(covidData[feature.getId()-1].risk),
               strokeWeight: 1
             });
@@ -286,11 +287,33 @@
             //initNewYorkMap(40.7128, -74.0060, 11, false); 
             //initNewYorkSimpleMap(42.8994, -74.2179, 7, false);
             initCountryMap(37.0902, -95.7129, 4, false);
-            initAttitudeMap(37.0902, -95.7129, 4, false);
+            //initAttitudeMap(37.0902, -95.7129, 4, false);
       },
       false);
     });
 
+    dc.loadRisk = function () {
+        showLoading("#main-content");
+        $ajaxUtils.sendGetRequest(
+            homeHtml,
+            function (responseText) {
+                document.querySelector("#main-content")
+                    .innerHTML = responseText;   
+                initAttitudeMap(37.0902, -95.7129, 4, false);                
+        },
+        false);
+    };
+    dc.loadAttitude = function () {
+        showLoading("#main-content");
+        $ajaxUtils.sendGetRequest(
+            graphHtml,
+            function (responseText) {
+                document.querySelector("#main-content")
+                    .innerHTML = responseText;   
+                initAttitudeMap(37.0902, -95.7129, 4, false);                
+        },
+        false);
+    };
 
     
     dc.loadGraphs = function () {
